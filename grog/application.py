@@ -5,6 +5,7 @@ from werkzeug.exceptions import HTTPException
 
 from grog.utils import session, metadata, local, local_manager, url_map
 from grog import views
+import grog.models
 
 class Grog(object):
 	def __init__(self, db_uri):

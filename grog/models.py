@@ -1,8 +1,10 @@
+from sqlalchemy import Column, Table, Integer, Unicode, UnicodeText, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.types import Integer, Unicode, UnicodeText, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
-Base = declarative_base()
+from grog.utils import metadata
+
+Base = declarative_base(metadata=metadata)
 
 class User(Base):
 	__tablename__ = 'users'
@@ -22,6 +24,9 @@ class User(Base):
 	def __repr__(self):
 		return "<User('%s','%s', '%s')>" % (self.name, self.fullname, self.password)
 
+	def to_api_dict(self):
+		return 
+
 entry_category_association = Table('entry_category', Base.metadata,
 	Column('entry_id', Integer, ForeignKey('entries.id')),
 	Column('category_id', Integer, ForeignKey('categories.id'))
@@ -38,7 +43,7 @@ class Entry(Base):
 	last_updated = Column(DateTime)
 
 	categories = relationship("Category",
-	                          secondary_association=entry_category_association,
+	                          secondary=entry_category_association,
 	                          backref="Entries")
 
 	comments = relationship("Comment", backref="entries")
