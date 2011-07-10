@@ -3,7 +3,7 @@ from werkzeug import script
 
 def make_app():
 	from grog.application import Grog
-	return Grog('sqlite:////tmp/grog.db')
+	return Grog()
 
 def make_shell():
 	from grog import models, utils

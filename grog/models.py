@@ -24,9 +24,6 @@ class User(Base):
 	def __repr__(self):
 		return "<User('%s','%s', '%s')>" % (self.name, self.fullname, self.password)
 
-	def to_api_dict(self):
-		return 
-
 entry_category_association = Table('entry_category', Base.metadata,
 	Column('entry_id', Integer, ForeignKey('entries.id')),
 	Column('category_id', Integer, ForeignKey('categories.id'))
@@ -57,6 +54,14 @@ class Entry(Base):
 
 	def __repr__(self):
 		return "<Entry('%s', '%s', '%s', '%s')>" % (self.title, self.content, self.author, self.created, self.last_updated)
+
+	def to_api_dict(self):
+		return {
+			'id': self.id,
+			'title': self.title,
+			'author': self.author,
+			'created': self.created,
+			'last_updated': self.last_updated }
 
 class Comment(Base):
 	__tablename__ = 'comments'
