@@ -8,4 +8,5 @@ def error_json(**kwargs):
 
 InsufficientPermissions = error_json(type='Insufficient Permissions')
 NotFound = error_json(type='Not Found')
+InvalidRequest = error_json(type='Invalid Request')
 

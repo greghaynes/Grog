@@ -1,4 +1,5 @@
 import os
+import hashlib
 
 # SECURE_COOKIE_SECRET is a key used for secure client side only cookies
 SECURE_COOKIE_SECRET = os.urandom(20)
@@ -10,4 +11,6 @@ ADMIN_PASSWORD = os.urandom(6)
 PRINT_ADMIN_PASSWORD = True
 
 DB_URI = 'sqlite:////tmp/grog.db'
+
+PASSWORD_HASH_FUNC = lambda passwd: hashlib.sha256(passwd).hexdigest()
 

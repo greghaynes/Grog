@@ -6,7 +6,7 @@ from werkzeug.local import Local, LocalManager
 from werkzeug.routing import Map, Rule
 from werkzeug.wrappers import Response
 
-from grog.canned_responses import NotFound
+from grog.canned_responses import NotFound, InvalidRequest
 
 import json
 
@@ -36,6 +36,21 @@ class handle_notfound(object):
 			return self.f(*args, **kwargs)
 		except NoResultFound:
 			return NotFound
+
+class needs_post_args(object):
+	def __init__(self, *args):
+		self.args = args
+	def __call__(self, f):
+		self.f = f
+		def decorate(request, *args, **kwargs):
+			if request.method != 'POST':
+				return InvalidRequest
+			for arg in self.args:
+				if not arg in request.args:
+					return InvalidRequest
+			return f(request, *args, **kwargs)
+		decorate.__name__ = f.__name__
+		return decorate
 
 def render_json(data):
 	return Response(json.dumps(data), mimetype='application/json')

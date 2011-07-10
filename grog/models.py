@@ -1,8 +1,10 @@
-from sqlalchemy import Column, Table, Integer, Unicode, UnicodeText, DateTime, ForeignKey
+from sqlalchemy import Column, Table, Integer, Unicode, UnicodeText, DateTime, ForeignKey, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
 from grog.utils import metadata
+
+from datetime import datetime
 
 Base = declarative_base(metadata=metadata)
 
@@ -13,6 +15,9 @@ class User(Base):
 	username = Column(Unicode)
 	fullname = Column(Unicode)
 	password = Column(Unicode)
+	superuser = Column(Boolean)
+	editor = Column(Boolean)
+	active = Column(Boolean)
 
 	entries = relationship("Entry", backref="users")
 
@@ -45,12 +50,12 @@ class Entry(Base):
 
 	comments = relationship("Comment", backref="entries")
 
-	def __init__(self, title, content, author, created, last_updated):
+	def __init__(self, title, content, author, created=None, last_updated=None):
 		self.title = title
 		self.content = content
 		self.author = author
-		self.created = created
-		self.last_updated = last_updated
+		self.created = created or datetime.utcnow()
+		self.last_updated = last_updated or datetime.utcnow()
 
 	def __repr__(self):
 		return "<Entry('%s', '%s', '%s', '%s')>" % (self.title, self.content, self.author, self.created, self.last_updated)
@@ -99,4 +104,18 @@ class Category(Base):
 
 	def __repr__(self):
 		return "<Category('%s', '%s')>" % (self.name, self.description)
+
+class ConfigOption(Base):
+	__tablename__ = 'config_options'
+
+	id = Column(Integer, primary_key=True)
+	key = Column(Unicode)
+	value = Column(Unicode)
+
+	def __init__(self, key, value):
+		self.key = key
+		self.value = value
+
+	def __repr__(self):
+		return "<ConfigOption('%s', '%s')>" % (self.key, self.value)
 
