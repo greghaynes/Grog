@@ -5,12 +5,11 @@ import hashlib
 SECURE_COOKIE_SECRET = os.urandom(20)
 
 # Password for admin user
-ADMIN_PASSWORD = os.urandom(6)
+ADMIN_PASSWORD = 'grogadmin'
 
-# Set to false to not print admin password on startup
-PRINT_ADMIN_PASSWORD = True
-
+# URI for database
 DB_URI = 'sqlite:////tmp/grog.db'
 
+# Hash function used for password storage
 PASSWORD_HASH_FUNC = lambda passwd: hashlib.sha256(passwd).hexdigest()
 

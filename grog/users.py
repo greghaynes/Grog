@@ -24,13 +24,22 @@ class editor_only(object):
 		request.user = user
 		return self.f(request, *args, **kwargs)
 
-class admin_only(object):
+class superuser_only(object):
 	def __init__(self, f):
 		self.f = f
 		self.__name__ = f.__name__
 	def __call__(self, request, *args, **kwargs):
+		# handle admin
 		try:
-			if not is_admin(request.client_session['user_id']):
+			if request.client_session['user_id'] == -1:
+				return self.f(request, *args, **kwargs)
+		except KeyError:
+			pass
+
+		# check db
+		try:
+			user = session.query(User).filter(User.id==request.client_session['user_id']).one()
+			if not user.superuser:
 				return InsufficientPermissions
 		except KeyError:
 			return InsufficientPermissions

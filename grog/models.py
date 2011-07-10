@@ -21,10 +21,13 @@ class User(Base):
 
 	entries = relationship("Entry", backref="users")
 
-	def __init__(self, name, fullname, password):
-		self.name = name
+	def __init__(self, username, fullname, password, editor=True, superuser=False, active=True):
+		self.username = username
 		self.fullname = fullname
 		self.password = password
+		self.editor = editor
+		self.superuser = superuser
+		self.active = active
 
 	def __repr__(self):
 		return "<User('%s','%s', '%s')>" % (self.name, self.fullname, self.password)
