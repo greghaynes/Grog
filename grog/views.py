@@ -16,6 +16,7 @@ def latest_entries(request, count):
 def create_entry(request):
 	e = Entry(request['title'], request['content'], request.user.id)
 	session.add(e)
+	return render_json(e.to_api_dict())
 
 @expose('/user/profile/<int:user_id>')
 @handle_notfound
@@ -39,4 +40,5 @@ def user_login(request):
 def create_user(request):
 	u = User(request.args['username'], request.args['fullname'], request.args['password'], request.args['editor'], request.args['superuser'])
 	session.add(u)
+	return render_json(u.to_api_dict())
 

@@ -32,6 +32,14 @@ class User(Base):
 	def __repr__(self):
 		return "<User('%s','%s', '%s')>" % (self.name, self.fullname, self.password)
 
+	def to_api_dict(self):
+		return {
+			'id': self.id,
+			'username': self.username,
+			'fullname': self.fullname,
+			'superuser': self.superuser,
+			'editor': self.editor }
+
 entry_category_association = Table('entry_category', Base.metadata,
 	Column('entry_id', Integer, ForeignKey('entries.id')),
 	Column('category_id', Integer, ForeignKey('categories.id'))
