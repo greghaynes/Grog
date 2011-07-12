@@ -2,3 +2,13 @@ Grog
 ---------------
 A simple JSON blog backend
 
+Usage:
+	Edit grog/settings.py to your liking
+
+	python manage.py initdb
+	python manage.py runserver
+
+Testing:
+	Edit tests/settings.py
+	python test.py
+
