@@ -47,7 +47,7 @@ def create_user(request):
 		return DuplicateError
 	except NoResultFound:
 		pass
-	u = User(request.form['username'], request.form['fullname'], request.form['password'], bool(request.form['editor']), bool(request.form['superuser']))
+	u = User(request.form['username'], request.form['fullname'], request.form['password'], request.form['editor'] == 'True', request.form['superuser'] == 'True')
 	session.add(u)
 	session.commit()
 	u = session.query(User).filter(User.username==request.form['username']).one()
