@@ -1,4 +1,5 @@
 from tests.user import CreateUser
+from tests.entry import CreateEntry
 
 import unittest
 

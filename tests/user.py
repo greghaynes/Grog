@@ -1,11 +1,7 @@
-from tests.settings import BASE_URL
 from tests.utils import ClientTester
 
 from grog.models import User
-from grog.settings import ADMIN_PASSWORD
 
-from urllib2 import build_opener, HTTPCookieProcessor, install_opener, urlopen
-from urllib import urlencode
 import json
 
 class CreateUser(ClientTester):
