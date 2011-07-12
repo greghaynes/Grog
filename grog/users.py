@@ -6,6 +6,7 @@ from grog.utils import session
 from grog.settings import PASSWORD_HASH_FUNC
 
 import os
+import logging
 
 def is_admin(user_id):
 	return False
@@ -31,10 +32,11 @@ class superuser_only(object):
 	def __call__(self, request, *args, **kwargs):
 		# handle admin
 		try:
-			if request.client_session['user_id'] == -1:
-				return self.f(request, *args, **kwargs)
+			is_admin = int(request.client_session['user_id']) == -1
 		except KeyError:
 			pass
+		if is_admin:
+			return self.f(request, *args, **kwargs)
 
 		# check db
 		try:
@@ -43,6 +45,8 @@ class superuser_only(object):
 				return InsufficientPermissions
 		except KeyError:
 			return InsufficientPermissions
+		except NoResultFound:
+			logging.debug('Invalid user ID (%d) supplied in valid cookie' % request.client_session['user_id'])
 		return self.f(request, *args, **kwargs)
 
 def password_salt():

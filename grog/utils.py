@@ -9,6 +9,7 @@ from werkzeug.wrappers import Response
 from grog.canned_responses import NotFound, InvalidRequest
 
 import json
+import logging
 
 local = Local()
 local_manager = LocalManager([local])
@@ -44,9 +45,10 @@ class needs_post_args(object):
 		self.f = f
 		def decorate(request, *args, **kwargs):
 			if request.method != 'POST':
+				logging.debug('Required POST, got %s' % request.method)
 				return InvalidRequest
 			for arg in self.args:
-				if not arg in request.args:
+				if not arg in request.form:
 					return InvalidRequest
 			return f(request, *args, **kwargs)
 		decorate.__name__ = f.__name__

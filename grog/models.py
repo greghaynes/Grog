@@ -12,7 +12,7 @@ class User(Base):
 	__tablename__ = 'users'
 
 	id = Column(Integer, primary_key=True)
-	username = Column(Unicode)
+	username = Column(Unicode, unique=True)
 	fullname = Column(Unicode)
 	password = Column(Unicode)
 	superuser = Column(Boolean)
