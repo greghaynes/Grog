@@ -1,3 +1,5 @@
+from sqlalchemy.orm.exc import NoResultFound
+
 from werkzeug.utils import redirect
 from werkzeug.exceptions import NotFound
 
@@ -5,6 +7,7 @@ from grog.utils import expose, render_json, session, handle_notfound, needs_post
 from grog.models import Entry, User
 from grog.users import editor_only, superuser_only, hash_password
 from grog.settings import ADMIN_PASSWORD
+from grog.canned_responses import DuplicateError
 
 @expose('/entries/latest/', defaults={'count': 5})
 @expose('/entries/latest/<int:count>')
@@ -39,6 +42,11 @@ def user_login(request):
 @superuser_only
 @needs_post_args('username', 'password', 'fullname', 'superuser', 'editor')
 def create_user(request):
+	try:
+		u = session.query(User.username==request.form['username']).one()
+		return DuplicateError
+	except NoResultFound:
+		pass
 	u = User(request.form['username'], request.form['fullname'], request.form['password'], bool(request.form['editor']), bool(request.form['superuser']))
 	session.add(u)
 	session.commit()

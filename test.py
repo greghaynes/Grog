@@ -1,4 +1,4 @@
-from tests.createuser import CreateUser
+from tests.user import CreateUser
 
 import unittest
 
