@@ -7,6 +7,7 @@ from grog.settings import PASSWORD_HASH_FUNC
 
 import os
 import logging
+from base64 import b64encode
 
 def is_admin(user_id):
 	return False
@@ -51,9 +52,9 @@ class superuser_only(object):
 
 def password_salt():
 	try:
-		salt = session.query(ConfigOption.value).filter(ConfigOption.name=='password_salt').one().value
+		salt = session.query(ConfigOption.value).filter(ConfigOption.key=='password_salt').one().value
 	except NoResultFound:
-		salt = os.urandom(16)
+		salt = b64encode(os.urandom(16))
 		co = ConfigOption('password_salt', salt)
 		session.add(co)
 	return salt
