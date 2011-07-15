@@ -20,6 +20,7 @@ def single_entry(request, entry_id):
 	return render_json(session.query(Entry).filter(Entry.id==entry_id).one().to_api_dict())
 
 @expose('/entry/delete/<int:entry_id>')
+@editor_only
 @handle_notfound
 def delete_entry(request, entry_id):
 	session.query(Entry).filter(Entry.id==entry_id).delete()
