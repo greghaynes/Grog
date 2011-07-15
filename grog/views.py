@@ -14,6 +14,17 @@ from grog.canned_responses import DuplicateError
 def latest_entries(request, count):
 	return render_json([entry.to_api_dict() for entry in session.query(Entry).order_by(Entry.created).limit(count)])
 
+@expose('/entry/<int:entry_id>')
+@handle_notfound
+def single_entry(request, entry_id):
+	return render_json(session.query(Entry).filter(Entry.id==entry_id).one().to_api_dict())
+
+@expose('/entry/delete/<int:entry_id>')
+@handle_notfound
+def delete_entry(request, entry_id):
+	session.query(Entry).filter(Entry.id==entry_id).delete()
+	session.commit()
+
 @expose('/entry/create')
 @editor_only
 @needs_post_args('title', 'content')
@@ -58,7 +69,7 @@ def create_user(request):
 @superuser_only
 @handle_notfound
 def delete_user(request, user_id):
-	session.query(User.id==user_id).delete()
+	session.query(User).filter(User.id==user_id).delete()
 	session.commit()
 	return render_json({'id': user_id})
 
