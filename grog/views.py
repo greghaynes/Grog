@@ -14,12 +14,13 @@ from grog.canned_responses import DuplicateError
 def latest_entries(request, count):
 	return render_json([entry.to_api_dict() for entry in session.query(Entry).order_by(Entry.created).limit(count)])
 
-@expose('/entries/create')
+@expose('/entry/create')
 @editor_only
 @needs_post_args('title', 'content')
 def create_entry(request):
-	e = Entry(request['title'], request['content'], request.user.id)
+	e = Entry(request.form['title'], request.form['content'], request.user.id)
 	session.add(e)
+	session.commit()
 	return render_json(e.to_api_dict())
 
 @expose('/user/profile/<int:user_id>')

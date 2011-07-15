@@ -75,9 +75,10 @@ class Entry(Base):
 		return {
 			'id': self.id,
 			'title': self.title,
+			'content': self.content,
 			'author': self.author,
-			'created': self.created,
-			'last_updated': self.last_updated }
+			'created': self.created.isoformat(),
+			'last_updated': self.last_updated.isoformat() }
 
 class Comment(Base):
 	__tablename__ = 'comments'
