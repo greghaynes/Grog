@@ -103,6 +103,16 @@ class Comment(Base):
 	def __repr__(self):
 		return "<Comment('%s', '%s', '%s', '%s', '%s', '%s')>" % (this.title, this.author_fullname, this.author_email, this.author_website, this.created, this.content)
 
+	def to_api_dict(self):
+		return {
+			'id': self.id,
+			'entry_id': self.entry,
+			'title': self.title,
+			'author_fullname': self.author_fullname,
+			'author_email': self.author_email,
+			'self.author_website': self.author_website,
+			'created': self.created.isoformat() }
+
 class Category(Base):
 	__tablename__ = 'categories'
 

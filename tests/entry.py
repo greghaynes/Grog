@@ -8,7 +8,7 @@ class CreateEntry(ClientTester):
 	def req_create_entry(self, title, content, author_id):
 		return self.post_req('entry/create', {'title': title, 'content': content}).read()
 
-	def test_create_entry(self):
+	def test_single_entry(self):
 		self.admin_login()
 
 		# Create temp user
@@ -20,6 +20,12 @@ class CreateEntry(ClientTester):
 		# Create Entry
 		resp = self.req_create_entry('A test entry', 'This is a test entry. It is not very long. For that I am sorry.', tmp_id)
 		self.assertFalse('status' in resp)
+
+		# TODO
+		# Check latest entries
+
+		# TODO
+		# Check specific entry by id
 
 		self.admin_login()
 

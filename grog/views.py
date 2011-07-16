@@ -4,7 +4,7 @@ from werkzeug.utils import redirect
 from werkzeug.exceptions import NotFound
 
 from grog.utils import expose, render_json, session, handle_notfound, needs_post_args
-from grog.models import Entry, User
+from grog.models import Entry, User, Comment
 from grog.users import editor_only, superuser_only, hash_password
 from grog.settings import ADMIN_PASSWORD
 from grog.canned_responses import DuplicateError
@@ -17,7 +17,9 @@ def latest_entries(request, count):
 @expose('/entry/<int:entry_id>')
 @handle_notfound
 def single_entry(request, entry_id):
-	return render_json(session.query(Entry).filter(Entry.id==entry_id).one().to_api_dict())
+	entry_dict = session.query(Entry).filter(Entry.id==entry_id).one().to_api_dict()
+	entry_dict['comments'] = [comment.to_api_dict() for comment in session.query(Comment).filter(Comment.entry==entry_id).order_by(Comment.created)]
+	return render_json(entry_dict)
 
 @expose('/entry/delete/<int:entry_id>')
 @editor_only
