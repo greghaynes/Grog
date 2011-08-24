@@ -5,7 +5,8 @@ from werkzeug.wsgi import ClosingIterator
 from werkzeug.exceptions import HTTPException
 from werkzeug.contrib.securecookie import SecureCookie
 
-from grog.utils import session, metadata, local, local_manager, url_map
+from grog.utils import session, metadata, local, local_manager
+from grog.urls import url_map
 from grog.settings import SECURE_COOKIE_SECRET, DB_URI
 from grog import views
 import grog.models

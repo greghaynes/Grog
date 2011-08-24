@@ -9,12 +9,9 @@ from grog.users import editor_only, superuser_only, hash_password
 from grog.settings import ADMIN_PASSWORD
 from grog.canned_responses import DuplicateError
 
-@expose('/entries/latest/', defaults={'count': 5})
-@expose('/entries/latest/<int:count>')
 def latest_entries(request, count):
 	return render_json([entry.to_api_dict() for entry in session.query(Entry).order_by(Entry.created).limit(count)])
 
-@expose('/entry/<int:entry_id>')
 @handle_notfound
 def single_entry(request, entry_id):
 	entry_dict = session.query(Entry).filter(Entry.id==entry_id).one().to_api_dict()
