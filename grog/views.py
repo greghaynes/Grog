@@ -18,14 +18,12 @@ def single_entry(request, entry_id):
 	entry_dict['comments'] = [comment.to_api_dict() for comment in session.query(Comment).filter(Comment.entry==entry_id).order_by(Comment.created)]
 	return render_json(entry_dict)
 
-@expose('/entry/delete/<int:entry_id>')
 @editor_only
 @handle_notfound
 def delete_entry(request, entry_id):
 	session.query(Entry).filter(Entry.id==entry_id).delete()
 	session.commit()
 
-@expose('/entry/create')
 @editor_only
 @needs_post_args('title', 'content')
 def create_entry(request):
@@ -34,12 +32,10 @@ def create_entry(request):
 	session.commit()
 	return render_json(e.to_api_dict())
 
-@expose('/user/profile/<int:user_id>')
 @handle_notfound
 def user_profile(request, user_id):
 	return render_json(session.query(User).filter(User.id==user_id).one().to_api_dict())
 
-@expose('/user/login')
 @handle_notfound
 @needs_post_args('username', 'password')
 def user_login(request):
@@ -50,7 +46,6 @@ def user_login(request):
 	request.client_session['user_id'] = user.id
 	return render_json(user.to_api_dict())
 
-@expose('/user/create')
 @superuser_only
 @needs_post_args('username', 'password', 'fullname', 'superuser', 'editor')
 def create_user(request):
@@ -65,7 +60,6 @@ def create_user(request):
 	u = session.query(User).filter(User.username==request.form['username']).one()
 	return render_json(u.to_api_dict())
 
-@expose('/user/delete/<int:user_id>')
 @superuser_only
 @handle_notfound
 def delete_user(request, user_id):

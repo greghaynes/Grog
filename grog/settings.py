@@ -17,4 +17,3 @@ PASSWORD_HASH_FUNC = lambda passwd: hashlib.sha256(passwd).hexdigest()
 logging.basicConfig(level='DEBUG')
 
 url_prefix = ''
-
