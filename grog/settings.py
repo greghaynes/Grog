@@ -18,4 +18,4 @@ logging.basicConfig(level='DEBUG')
 
 url_prefix = ''
 
-STATIC_CONTENT_PATH = 'viewer'
+STATIC_CONTENT_PATH = '../viewer'
