@@ -2,8 +2,8 @@
 from werkzeug import script
 
 def make_app():
-	from grog.application import Grog
-	return Grog()
+	from grog.application import create_app
+	return create_app()
 
 def make_shell():
 	from grog import models, utils
