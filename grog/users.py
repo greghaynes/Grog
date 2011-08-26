@@ -32,6 +32,7 @@ class superuser_only(object):
 		self.__name__ = f.__name__
 	def __call__(self, request, *args, **kwargs):
 		# handle admin
+		is_admin = False
 		try:
 			is_admin = int(request.client_session['user_id']) == -1
 		except KeyError:
@@ -48,6 +49,26 @@ class superuser_only(object):
 			return InsufficientPermissions
 		except NoResultFound:
 			logging.debug('Invalid user ID (%d) supplied in valid cookie' % request.client_session['user_id'])
+		return self.f(request, *args, **kwargs)
+
+class user_only(object):
+	def __init__(self, f):
+		self.f = f
+		self.__name__ = f.__name__
+	def __call__(self, request, *args, **kwargs):
+		is_admin = False
+		try:
+			is_admin = int(request.client_session['user_id']) == -1
+		except KeyError:
+			pass
+		if is_admin:
+			return self.f(request, *args, **kwargs)
+
+		try:
+			user = session.query(User).filter(User.id==request.client_session['user_id']).one()
+		except (KeyError, NoResultFound):
+			return InsufficientPermissions
+		request.user = user
 		return self.f(request, *args, **kwargs)
 
 def password_salt():

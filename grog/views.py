@@ -5,7 +5,7 @@ from werkzeug.exceptions import NotFound
 
 from grog.utils import expose, render_json, session, handle_notfound, needs_post_args
 from grog.models import Entry, User, Comment
-from grog.users import editor_only, superuser_only, hash_password
+from grog.users import editor_only, superuser_only, user_only, hash_password
 from grog.settings import ADMIN_PASSWORD
 from grog.canned_responses import DuplicateError
 
@@ -66,4 +66,8 @@ def delete_user(request, user_id):
 	session.query(User).filter(User.id==user_id).delete()
 	session.commit()
 	return render_json({'id': user_id})
+
+@user_only
+def whoami(request):
+	return render_json({'id': request.client_session['user_id']})
 

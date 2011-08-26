@@ -10,5 +10,6 @@ url_map = Map([
 	Rule('/user/login', endpoint='user_login'),
 	Rule('/user/create', endpoint='create_user'),
 	Rule('/user/delete/<int:user_id>', endpoint='delete_user'),
+	Rule('/user/whoami', endpoint='whoami'),
 ])
 

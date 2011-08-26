@@ -11,6 +11,14 @@
 		width: 300px;
 		opacity: 0;
 	}
+
+	#container {
+		opacity: 0;
+	}
+
+	#navigation {
+		float: left;
+	}
 	</style>
 </head>
 
@@ -24,9 +32,31 @@
 	<span id="logindiv_errmsg"></span>
 </div>
 
+<div id="container">
+	<ul id="navigation">
+		Navigation
+		<li>Entries</li>
+		<li>Settings</li>
+	</ul>
+
+	<div id="content">
+	</div>
+</div>
+
 <script type="text/javascript">
 	var grogadmin = {
 		is_logged_in: false,
+
+		check_login: function(success, error) {
+			$.getJSON('/user/whoami', function(data) {
+				console.log(data);
+				if('id' in data)
+					grogadmin.is_logged_in = true;
+				else
+					grogadmin.is_logged_in = false;
+				success(data);
+			}, error);
+		},
 
 		login: function(username, password, success, error) {
 			$.ajax({
@@ -63,12 +93,21 @@
 		}
 	}
 
+	// content
+	function page_hide() {
+		$("#container").animate({opacity: 0});
+	}
+
+	function page_show() {
+		$("#container").animate({opacity: '100%'});
+	}
+
 	function do_login(username, password) {
 		console.log("logging in as "+username+" "+password);
 		grogadmin.login(username, password, function(data) {
 			if(grogadmin.is_logged_in) {
 				login_dialog_hide();
-				page_load_main();
+				page_show();
 			}
 			else
 				login_dialog_display_error(data);
@@ -80,7 +119,12 @@
 		do_login($("#username").val(), $("#password").val());
 	});
 
-	login_dialog_show();
+	grogadmin.check_login(function(data) {
+		if(!grogadmin.is_logged_in)
+			login_dialog_show();
+		else
+			page_show();
+	});
 
 </script>
 
