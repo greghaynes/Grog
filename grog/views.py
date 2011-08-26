@@ -46,6 +46,12 @@ def user_login(request):
 	request.client_session['user_id'] = user.id
 	return render_json(user.to_api_dict())
 
+@user_only
+def user_logout(request):
+	user_id = request.client_session['user_id']
+	del request.client_session['user_id']
+	return render_json({'id': user_id})
+
 @superuser_only
 @needs_post_args('username', 'password', 'fullname', 'superuser', 'editor')
 def create_user(request):

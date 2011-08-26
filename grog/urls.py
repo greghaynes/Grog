@@ -8,6 +8,7 @@ url_map = Map([
 	Rule('/entry/create', endpoint='create_entry'),
 	Rule('/user/profile/<int:user_id>', endpoint='user_profile'),
 	Rule('/user/login', endpoint='user_login'),
+	Rule('/user/logout', endpoint='user_logout'),
 	Rule('/user/create', endpoint='create_user'),
 	Rule('/user/delete/<int:user_id>', endpoint='delete_user'),
 	Rule('/user/whoami', endpoint='whoami'),
