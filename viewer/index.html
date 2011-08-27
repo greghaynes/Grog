@@ -1,6 +1,7 @@
 <html>
 <head>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script type="text/javascript" src="grog.js"></script>
 </head>
 
 <body>
@@ -8,12 +9,6 @@
 	</ul>
 
 	<script type="text/javascript">
-	var grog = {
-		getLatestEntries: function(handler) {
-			$.getJSON('/entries/latest', handler);
-		}
-	}
-
 	grog.getLatestEntries(function(entries) {
 		$.each(entries, function(ndx, entry) {
 			$("<li class=\"entry\"><h3>"+entry.title+"</h3><p>"+entry.content+"</p></li>").appendTo("#entries");

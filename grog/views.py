@@ -9,8 +9,8 @@ from grog.users import editor_only, superuser_only, user_only, hash_password
 from grog.settings import ADMIN_PASSWORD
 from grog.canned_responses import DuplicateError
 
-def latest_entries(request, count):
-	return render_json([entry.to_api_dict() for entry in session.query(Entry).order_by(Entry.created).limit(count)])
+def latest_entries(request, count, offset):
+	return render_json([entry.to_api_dict() for entry in session.query(Entry).order_by(Entry.created).offset(offset).limit(count)])
 
 @handle_notfound
 def single_entry(request, entry_id):
