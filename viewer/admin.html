@@ -100,16 +100,27 @@
 		});
 	}
 
+	function create_entry_show() {
+	}
+
 	function entries_show() {
 		clear_content();
+
+		$("<a href=\"#create_entry\">Create entry</a>").appendTo("#content");
+		$("#create_entry").click(function(event) { create_entry_show(); });
+
 		$("<ul id=\"entrylist\"></ul>").appendTo("#content");
 
 		// load entry list
 		grog.getLatestEntries(function(data) {
-			$.each(data, function(ndx, entry) {
-				$("<li id=\"entry_"+entry.id+"\">"+entry.title+" <a href=\"#edit_"+entry.id+"\" id=\"edit_"+entry.id+"\">edit</a></li>").appendTo("#entrylist");
-				$("#edit_"+entry.id).click(function(event) { entry_show(entry.id); });
-			});
+			if(data.length == 0)
+				$("<li>There are currently no entries.</li>").appendTo("#entrylist");
+			else {
+				$.each(data, function(ndx, entry) {
+					$("<li id=\"entry_"+entry.id+"\">"+entry.title+" <a href=\"#edit_"+entry.id+"\" id=\"edit_"+entry.id+"\">edit</a></li>").appendTo("#entrylist");
+					$("#edit_"+entry.id).click(function(event) { entry_show(entry.id); });
+				});
+			}
 		});
 	}
 
