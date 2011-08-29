@@ -32,5 +32,21 @@ var grogadmin = {
 			success(data);
 		});
 	},
+
+	create_entry: function(title, content, success_handler, error_handler) {
+		$.ajax({
+			type: 'POST',
+			url: '/entry/create',
+			data: {'title': title, 'content': content},
+			success: function(data) {
+				if('id' in data)
+					success_handler(data);
+				else
+					error_handler(data);
+				},
+			error: error_handler,
+			dataType: 'json'
+		});
+	}
 };
 

@@ -101,12 +101,37 @@
 	}
 
 	function create_entry_show() {
+		clear_content();
+
+		var cont_div = $("<div id=\"entry_create_cont\"></div>");
+		$("<h4>Title</h3>").appendTo(cont_div);
+		$("<input type=\"text\" id=\"entry_title\" />").appendTo(cont_div);
+		$("<h4>Content</h3>").appendTo(cont_div);
+		$("<textarea id=\"entry_content\"></textarea>").appendTo(cont_div);
+		$("<br />").appendTo(cont_div);
+		$("<button id=\"entry_create_submit\">Create</button>").appendTo(cont_div);
+
+		cont_div.appendTo("#content");
+
+		// On create entry
+		$("#entry_create_submit").click(function(event) {
+			console.log("creating entry...");
+			grogadmin.create_entry($("#entry_title").val(), $("#entry_content").val(),
+				function(data) {
+					console.log(data);
+				},
+				function(error) {
+					console.log(error);
+				}
+			);
+		});
+
 	}
 
 	function entries_show() {
 		clear_content();
 
-		$("<a href=\"#create_entry\">Create entry</a>").appendTo("#content");
+		$("<a href=\"#create_entry\" id=\"create_entry\">Create entry</a>").appendTo("#content");
 		$("#create_entry").click(function(event) { create_entry_show(); });
 
 		$("<ul id=\"entrylist\"></ul>").appendTo("#content");
