@@ -1,12 +1,26 @@
 var grogadmin = {
 	is_logged_in: false,
+	is_editor: false,
+	is_superuser: false,
+
+	reset_user: function() {
+		grogadmin.is_logged_in = false;
+		grogadmin.is_editor = false;
+		grogadmin.is_superuser = false;
+	},
+
+	load_user: function(user) {
+		grogadmin.is_logged_in = user.active;
+		grogadmin.is_editor = user.editor;
+		grogadmin.is_superuser = user.superuser;
+	},
 
 	check_login: function(success, error) {
 		$.getJSON('/user/whoami', function(data) {
 			if('id' in data)
-				grogadmin.is_logged_in = true;
+				grogadmin.load_user(data);
 			else
-				grogadmin.is_logged_in = false;
+				grogadmin.reset_user();
 			success(data);
 		}, error);
 	},
@@ -18,7 +32,7 @@ var grogadmin = {
 			data: {'username': username, 'password': password},
 			success: function(data) {
 				if('id' in data)
-					grogadmin.is_logged_in = true;
+					grogadmin.load_user(data);
 				success(data);
 				},
 			error: error,
@@ -28,7 +42,7 @@ var grogadmin = {
 	logout: function(success) {
 		$.getJSON('/user/logout', function(data) {
 			if('id' in data)
-				grogadmin.is_logged_in = false;
+				grogadmin.reset_user();
 			success(data);
 		});
 	},

@@ -52,9 +52,6 @@
 
 <div id="container">
 	<ul id="navigation">
-		<li><a href="#entries" id="entries">Entries</a></li>
-		<li><a href="#settings">Settings</a></li>
-		<li><a href="#logout" id="logout">Log Out</a></li>
 	</ul>
 
 	<div id="content">
@@ -89,10 +86,6 @@
 
 	function page_hide() {
 		$("#container").animate({opacity: 0});
-	}
-
-	function page_show() {
-		$("#container").animate({opacity: '100%'});
 	}
 
 	function entry_show(entry_id) {
@@ -159,6 +152,35 @@
 		$("#entrylist").animate({opacity: 0});
 	}
 
+	function page_show() {
+		clear_content();
+		$("#navigation").html("");
+
+		$("<li><a href=\"#entries\" id=\"entries\">Entries</a></li>").appendTo("#navigation");
+		if(grogadmin.is_superuser)
+			$("<li><a href=\"#useradmin\">User Admin</a></li>").appendTo("#navigation");
+		$("<li><a href=\"#settings\">Settings</a></li>").appendTo("#navigation");
+		$("<li><a href=\"#logout\" id=\"logout\">Log Out</a></li>").appendTo("#navigation");
+
+		$("#container").animate({opacity: '100%'});
+		
+		// Setup handlers
+		$("#login_button").click(function(event) {
+			do_login($("#username").val(), $("#password").val());
+		});
+
+		$("#logout").click(function(event) { 
+			grogadmin.logout(function(data) {
+				page_hide();
+				login_dialog_show();
+			})
+		});
+
+		$("#entries").click(function(event) {
+			entries_show();
+		});
+	}
+
 	function do_login(username, password) {
 		console.log("logging in as "+username+" "+password);
 		grogadmin.login(username, password, function(data) {
@@ -170,22 +192,6 @@
 				login_dialog_display_error(data);
 		});
 	}
-
-	// Setup handlers
-	$("#login_button").click(function(event) {
-		do_login($("#username").val(), $("#password").val());
-	});
-
-	$("#logout").click(function(event) { 
-		grogadmin.logout(function(data) {
-			page_hide();
-			login_dialog_show();
-		})
-	});
-
-	$("#entries").click(function(event) {
-		entries_show();
-	});
 
 	// Check current login or show login dialog
 	grogadmin.check_login(function(data) {
