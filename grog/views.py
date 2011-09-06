@@ -81,3 +81,7 @@ def delete_user(request, user_id):
 def whoami(request):
 	return user_profile(request, request.client_session['user_id'])
 
+@superuser_only
+def users_list(request, count, offset):
+	user_q = session.query(User).order_by(User.username).offset(offset).limit(count)
+	return render_json([u.to_api_dict() for u in user_q])

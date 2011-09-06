@@ -61,6 +61,16 @@ var grogadmin = {
 			error: error_handler,
 			dataType: 'json'
 		});
-	}
+	},
+
+	users_list: function(success, error) {
+		$.getJSON('/users/list', function(data) {
+			if('type' in data)
+				error(data);
+			else
+				success(data);
+			},
+			error);
+	},
 };
 

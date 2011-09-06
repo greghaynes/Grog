@@ -131,7 +131,8 @@
 	function entries_show() {
 		clear_content();
 
-		$("<a href=\"#create_entry\" id=\"create_entry\">Create entry</a>").appendTo("#content");
+		if(grogadmin.is_editor)
+			$("<a href=\"#create_entry\" id=\"create_entry\">Create entry</a>").appendTo("#content");
 		$("#create_entry").click(function(event) { create_entry_show(); });
 
 		$("<ul id=\"entrylist\"></ul>").appendTo("#content");
@@ -153,13 +154,30 @@
 		$("#entrylist").animate({opacity: 0});
 	}
 
+	function users_list_show() {
+		clear_content();
+
+		$("<p>Loading...</p>").appendTo("#content");
+
+		grogadmin.users_list(function(data) {
+				clear_content();
+				$("<a href=\"#user_create\" id=\"user_create\">Create User</a>").appendTo("#content");
+				$("<ul id=\"users_list_ul\"></ul>").appendTo("#content");
+				$.each(data, function(ndx, user) {
+					$("<li>"+user.username+"</li>").appendTo("#users_list_ul")
+				});
+			}, function(data) { });
+	}
+
 	function page_show() {
 		clear_content();
 		$("#navigation").html("");
 
 		$("<li><a href=\"#entries\" id=\"entries\">Entries</a></li>").appendTo("#navigation");
-		if(grogadmin.is_superuser)
-			$("<li><a href=\"#useradmin\">User Admin</a></li>").appendTo("#navigation");
+		if(grogadmin.is_superuser) {
+			$("<li><a href=\"#useradmin\" id=\"useradmin\">User Admin</a></li>").appendTo("#navigation");
+			$("#useradmin").click(function(event) { users_list_show(); });
+		}
 		$("<li><a href=\"#settings\">Settings</a></li>").appendTo("#navigation");
 		$("<li><a href=\"#logout\" id=\"logout\">Log Out</a></li>").appendTo("#navigation");
 
