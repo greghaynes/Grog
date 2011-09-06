@@ -38,6 +38,7 @@ class User(Base):
 			'username': self.username,
 			'fullname': self.fullname,
 			'superuser': self.superuser,
+			'active': self.active,
 			'editor': self.editor }
 
 entry_category_association = Table('entry_category', Base.metadata,

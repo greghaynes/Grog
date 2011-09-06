@@ -75,6 +75,7 @@
 			else
 				$("#logindiv_errmsg").html(error.type);
 		} else {
+			console.log(error);
 			$("#logindiv_errmsg").html("Undefined error.");
 		}
 	}
@@ -165,10 +166,6 @@
 		$("#container").animate({opacity: '100%'});
 		
 		// Setup handlers
-		$("#login_button").click(function(event) {
-			do_login($("#username").val(), $("#password").val());
-		});
-
 		$("#logout").click(function(event) { 
 			grogadmin.logout(function(data) {
 				page_hide();
@@ -192,6 +189,11 @@
 				login_dialog_display_error(data);
 		});
 	}
+
+	// Setup handlers
+	$("#login_button").click(function(event) {
+		do_login($("#username").val(), $("#password").val());
+	});
 
 	// Check current login or show login dialog
 	grogadmin.check_login(function(data) {

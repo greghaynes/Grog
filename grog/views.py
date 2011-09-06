@@ -34,6 +34,10 @@ def create_entry(request):
 
 @handle_notfound
 def user_profile(request, user_id):
+	if user_id == -1:
+		user = User('admin', 'Administrator User', '', False, True, True)
+		user.id = -1
+		return render_json(user.to_api_dict())
 	return render_json(session.query(User).filter(User.id==user_id).one().to_api_dict())
 
 @handle_notfound
@@ -41,7 +45,7 @@ def user_profile(request, user_id):
 def user_login(request):
 	if request.form['username'] == 'admin' and request.form['password'] == ADMIN_PASSWORD:
 		request.client_session['user_id'] = -1
-		return render_json({'id': -1, })
+		return user_profile(request, -1)
 	user = session.query(User).filter(User.username==request.form['username']).filter(User.password==hash_password(request.form['password'])).one()
 	request.client_session['user_id'] = user.id
 	return render_json(user.to_api_dict())
@@ -75,5 +79,5 @@ def delete_user(request, user_id):
 
 @user_only
 def whoami(request):
-	return render_json({'id': request.client_session['user_id']})
+	return user_profile(request, request.client_session['user_id'])
 
