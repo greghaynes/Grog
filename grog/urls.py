@@ -14,10 +14,10 @@ url_map = Map([
 
 	# User viewing
 	Rule('/user/profile/<int:user_id>', endpoint='user_profile'),
-	Rule('/user/login', endpoint='user_login'),
 	Rule('/user/whoami', endpoint='whoami'),
 
 	# User Actions
+	Rule('/user/login', endpoint='user_login'),
 	Rule('/user/logout', endpoint='user_logout'),
 
 	# User admin
