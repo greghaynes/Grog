@@ -1,5 +1,5 @@
 var grog = {
-	getLatestEntries: function(handler, offset, count) {
+	get_latest_entries: function(handler, offset, count) {
 		offset = typeof(offset) != 'undefined' ? offset: 0;
 		count = typeof(count) != 'undefined' ? count: 0;
 
@@ -12,7 +12,7 @@ var grog = {
 			$.getJSON('/entries/latest/'+offset+'/'+count, handler);
 	},
 
-	getEntry: function(entry_id, handler) {
+	get_entry: function(entry_id, handler) {
 		$.getJSON('/entry/'+entry_id, handler);
 	}
 };

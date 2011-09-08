@@ -92,7 +92,7 @@
 	function entry_show(entry_id) {
 		clear_content();
 
-		grog.getEntry(entry_id, function(entry) {
+		grog.get_entry(entry_id, function(entry) {
 			edit_div = $("<div id=\"entry_edit\"></div>");
 			$("<h3>"+entry.title+"</h3>").appendTo(edit_div);
 			$("<p>"+entry.content+"</p>").appendTo(edit_div);
@@ -138,7 +138,7 @@
 		$("<ul id=\"entrylist\"></ul>").appendTo("#content");
 
 		// load entry list
-		grog.getLatestEntries(function(data) {
+		grog.get_latest_entries(function(data) {
 			if(data.length == 0)
 				$("<li>There are currently no entries.</li>").appendTo("#entrylist");
 			else {

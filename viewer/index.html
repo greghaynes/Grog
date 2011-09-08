@@ -9,7 +9,7 @@
 	</ul>
 
 	<script type="text/javascript">
-	grog.getLatestEntries(function(entries) {
+	grog.get_latest_entries(function(entries) {
 		$.each(entries, function(ndx, entry) {
 			$("<li class=\"entry\"><h3>"+entry.title+"</h3><p>"+entry.content+"</p></li>").appendTo("#entries");
 		});
