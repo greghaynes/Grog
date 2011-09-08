@@ -67,7 +67,7 @@ def create_user(request):
 		return DuplicateError
 	except NoResultFound:
 		pass
-	u = User(request.form['username'], request.form['fullname'], hash_password(request.form['password']), request.form['editor'] == 'True', request.form['superuser'] == 'True')
+	u = User(request.form['username'], request.form['fullname'], hash_password(request.form['password']), request.form['editor']=='true', request.form['superuser']=='true')
 	# handle query errors and return a valid response
 	session.add(u)
 	session.commit()

@@ -163,6 +163,7 @@
 		$("<p>Superuser (Can create users): <input type=\"checkbox\" id=\"superuser\"/></p>").appendTo("#content");
 		$("<p>Editor: <input type=\"checkbox\" id=\"editor\"/></p>").appendTo("#content");
 		$("<button id=\"create_user\">Create</button>").click(function(event) {
+			console.log($("#editor").is(":checked"));
 			grogadmin.create_user($("#new_username").val(),
 			                      $("#new_password").val(),
 			                      $("#fullname").val(),
