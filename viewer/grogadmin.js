@@ -72,5 +72,21 @@ var grogadmin = {
 			},
 			error);
 	},
+
+	create_user: function(username, password, fullname, is_superuser, is_editor, success_handler, error_handler) {
+		$.ajax({
+			type: 'POST',
+			url: '/user/create',
+			data: {'username': username, 'password': password, 'fullname': fullname, 'superuser': is_superuser, 'editor': is_editor},
+			success: function(data) {
+				if('id' in data)
+					success_handler(data);
+				else
+					error_handler(data);
+				},
+			error: error_handler,
+			dataType: 'json'
+		});
+	},
 };
 

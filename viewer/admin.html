@@ -154,6 +154,25 @@
 		$("#entrylist").animate({opacity: 0});
 	}
 
+	function user_create_show() {
+		clear_content();
+
+		$("<p>Username: <input type=\"text\" id=\"new_username\"/></p>").appendTo("#content");
+		$("<p>Full Name: <input type=\"text\" id=\"fullname\"/></p>").appendTo("#content");
+		$("<p>Password: <input type=\"password\" id=\"new_password\"/></p>").appendTo("#content");
+		$("<p>Superuser (Can create users): <input type=\"checkbox\" id=\"superuser\"/></p>").appendTo("#content");
+		$("<p>Editor: <input type=\"checkbox\" id=\"editor\"/></p>").appendTo("#content");
+		$("<button id=\"create_user\">Create</button>").click(function(event) {
+			grogadmin.create_user($("#new_username").val(),
+			                      $("#new_password").val(),
+			                      $("#fullname").val(),
+			                      $("#superuser").is(":checked"),
+			                      $("#editor").is(":checked"),
+				function(data) { console.log(data); clear_content(); $("<p>User created.</p>").appendTo("#content"); },
+				function(error) { console.log(error); $("<p>Error!</p>").appendTo("#content"); });
+			}).appendTo("#content");
+	}
+
 	function users_list_show() {
 		clear_content();
 
@@ -161,7 +180,7 @@
 
 		grogadmin.users_list(function(data) {
 				clear_content();
-				$("<a href=\"#user_create\" id=\"user_create\">Create User</a>").appendTo("#content");
+				$("<a href=\"#user_create\" id=\"user_create\">Create User</a>").click(function(event) { user_create_show(); }).appendTo("#content");
 				$("<ul id=\"users_list_ul\"></ul>").appendTo("#content");
 				$.each(data, function(ndx, user) {
 					$("<li>"+user.username+"</li>").appendTo("#users_list_ul")

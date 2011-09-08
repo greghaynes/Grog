@@ -9,6 +9,8 @@ from grog.users import editor_only, superuser_only, user_only, hash_password
 from grog.settings import ADMIN_PASSWORD
 from grog.canned_responses import DuplicateError
 
+import logging
+
 def latest_entries(request, count, offset):
 	return render_json([entry.to_api_dict() for entry in session.query(Entry).order_by(Entry.created).offset(offset).limit(count)])
 
@@ -60,11 +62,13 @@ def user_logout(request):
 @needs_post_args('username', 'password', 'fullname', 'superuser', 'editor')
 def create_user(request):
 	try:
-		u = session.query(User.username==request.form['username']).one()
+		u = session.query(User).filter(User.username==request.form['username']).one()
+		logging.debug("Not creating user %s, username already in use." % request.form['username'])
 		return DuplicateError
 	except NoResultFound:
 		pass
 	u = User(request.form['username'], request.form['fullname'], hash_password(request.form['password']), request.form['editor'] == 'True', request.form['superuser'] == 'True')
+	# handle query errors and return a valid response
 	session.add(u)
 	session.commit()
 	u = session.query(User).filter(User.username==request.form['username']).one()
@@ -84,4 +88,7 @@ def whoami(request):
 @superuser_only
 def users_list(request, count, offset):
 	user_q = session.query(User).order_by(User.username).offset(offset).limit(count)
-	return render_json([u.to_api_dict() for u in user_q])
+	users_list = [u.to_api_dict() for u in user_q]
+	print users_list
+	return render_json(users_list)
+
