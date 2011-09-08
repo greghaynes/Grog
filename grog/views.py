@@ -10,6 +10,7 @@ from grog.settings import ADMIN_PASSWORD
 from grog.canned_responses import DuplicateError
 
 import logging
+import datetime
 
 def latest_entries(request, count, offset):
 	return render_json([entry.to_api_dict() for entry in session.query(Entry).order_by(Entry.created).offset(offset).limit(count)])
@@ -19,6 +20,14 @@ def single_entry(request, entry_id):
 	entry_dict = session.query(Entry).filter(Entry.id==entry_id).one().to_api_dict()
 	entry_dict['comments'] = [comment.to_api_dict() for comment in session.query(Comment).filter(Comment.entry==entry_id).order_by(Comment.created)]
 	return render_json(entry_dict)
+
+@handle_notfound
+@needs_post_args('title', 'content', 'author_fullname', 'author_email', 'author_website')
+def comment_create(request):
+	c = Comment(request.form['title'], request.form['author_fullname'], request.form['author_email'], request.form['author_website'], datetime.datetime.now().isoformat(), request.form['content'])
+	session.add(c)
+	session.commit()
+	return render_json(c.to_api_dict())
 
 @editor_only
 @handle_notfound

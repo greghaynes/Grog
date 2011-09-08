@@ -1,11 +1,12 @@
 from werkzeug.routing import Map, Rule
 
 url_map = Map([
-	# Entry viewing
+	# Entry
 	Rule('/entries/latest', endpoint='latest_entries', defaults={'count': 5, 'offset': 0}),
 	Rule('/entries/latest/<int:count>', endpoint='latest_entries', defaults={'offset': 0}),
 	Rule('/entries/latest/<int:offset>/<int:count>', endpoint='latest_entries'), 
 	Rule('/entry/<int:entry_id>', endpoint='single_entry'),
+	Rule('/entry/<int:entry_id>/comment/create', endpoint='comment_create'),
 
 	# Entry Admin
 	Rule('/entry/delete/<int:entry_id>', endpoint='delete_entry'),
