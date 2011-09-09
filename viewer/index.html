@@ -5,15 +5,36 @@
 </head>
 
 <body>
-	<ul id="entries">
-	</ul>
+	<div id="content">
+	</div>
 
 	<script type="text/javascript">
-	grog.get_latest_entries(function(entries) {
-		$.each(entries, function(ndx, entry) {
-			$("<li class=\"entry\"><h3>"+entry.title+"</h3><p>"+entry.content+"</p></li>").appendTo("#entries");
+	function clear_content() {
+		$("#content").html("");
+	}
+
+	function comment_entry(id) {
+		clear_content();
+		$("<a href=\"#\">Back to entries</a>").click(function(event) { show_entries(); }).appendTo("#content");
+		$("<div id=\"entry_view\">Loading...</div>").appendTo("#content");
+		grog.get_entry(id, function(entry) {
+			$("#entry_view").html("");
+			$("<h3>"+entry.title+"</h3>").appendTo("#content");
+			});
+	}
+
+	function show_entries() {
+		grog.get_latest_entries(function(entries) {
+			clear_content();
+			$("<ul id=\"entries\"></ul>").appendTo("#content");
+			$.each(entries, function(ndx, entry) {
+				$("<li class=\"entry\"><div id=\"entry_"+entry.id+"\"><h3>"+entry.title+"</h3><p>"+entry.content+"</p><p><a href=\"#comment_entry_"+entry.id+"\" id=\"comment_entry_"+entry.id+"\">Comment</a></div></li>").appendTo("#entries");
+				$("#comment_entry_"+entry.id).click(function(event) { comment_entry(entry.id); });
+			});
 		});
-	});
+	}
+
+	show_entries();
 	</script>
 </body>
 </html>
