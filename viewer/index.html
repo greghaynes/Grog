@@ -20,6 +20,15 @@
 		grog.get_entry(id, function(entry) {
 			$("#entry_view").html("");
 			$("<h3>"+entry.title+"</h3>").appendTo("#content");
+			$("<p>"+entry.content+"</p>").appendTo("#content");
+			$("<h4>Author</h4>").appendTo("#content");
+			$("<p>Name: <input type=\"text\"/></p>").appendTo("#content");
+			$("<p>email: <input type=\"text\"/></p>").appendTo("#content");
+			$("<p>Website: <input type=\"text\"/></p>").appendTo("#content");
+			$("<h4>Comment</h4>").appendTo("#content");
+			$("<p>Title: <input type=\"text\"/></p>").appendTo("#content");
+			$("<p>Comment:<br /><textarea></textarea></p>").appendTo("#content");
+			$("<button>Leave Comment</button>").appendTo("#content");
 			});
 	}
 
