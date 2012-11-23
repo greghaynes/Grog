@@ -1,50 +1,25 @@
 <html>
 <head>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-	<script type="text/javascript" src="grog.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/underscore.js"></script>
+	<script type="text/javascript" src="js/backbone.js"></script>
+	<script type="text/javascript" src="js/handlebars.js"></script>
+	<script type="text/javascript" src="js/mustache.js"></script>
+	<script type="text/javascript" src="js/moment.js"></script>
 </head>
 
 <body>
-	<div id="content">
-	</div>
+    <script id="entryTemplate" type="text/x-handlebars-template">
+        <h2 class="entry-title">{{ title }}</h2>
+        <div class="entry-content">
+            {{ content }}
+        </div>
+    </script>
 
-	<script type="text/javascript">
-	function clear_content() {
-		$("#content").html("");
-	}
+    <div id="entries">
+    </div>
 
-	function comment_entry(id) {
-		clear_content();
-		$("<a href=\"#\">Back to entries</a>").click(function(event) { show_entries(); }).appendTo("#content");
-		$("<div id=\"entry_view\">Loading...</div>").appendTo("#content");
-		grog.get_entry(id, function(entry) {
-			$("#entry_view").html("");
-			$("<h3>"+entry.title+"</h3>").appendTo("#content");
-			$("<p>"+entry.content+"</p>").appendTo("#content");
-			$("<h4>Author</h4>").appendTo("#content");
-			$("<p>Name: <input type=\"text\"/></p>").appendTo("#content");
-			$("<p>email: <input type=\"text\"/></p>").appendTo("#content");
-			$("<p>Website: <input type=\"text\"/></p>").appendTo("#content");
-			$("<h4>Comment</h4>").appendTo("#content");
-			$("<p>Title: <input type=\"text\"/></p>").appendTo("#content");
-			$("<p>Comment:<br /><textarea></textarea></p>").appendTo("#content");
-			$("<button>Leave Comment</button>").appendTo("#content");
-			});
-	}
-
-	function show_entries() {
-		grog.get_latest_entries(function(entries) {
-			clear_content();
-			$("<ul id=\"entries\"></ul>").appendTo("#content");
-			$.each(entries, function(ndx, entry) {
-				$("<li class=\"entry\"><div id=\"entry_"+entry.id+"\"><h3>"+entry.title+"</h3><p>"+entry.content+"</p><p><a href=\"#comment_entry_"+entry.id+"\" id=\"comment_entry_"+entry.id+"\">Comment</a></div></li>").appendTo("#entries");
-				$("#comment_entry_"+entry.id).click(function(event) { comment_entry(entry.id); });
-			});
-		});
-	}
-
-	show_entries();
-	</script>
+	<script type="text/javascript" src="js/grog.js"></script>
 </body>
 </html>
 
