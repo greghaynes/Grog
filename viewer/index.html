@@ -1,20 +1,36 @@
 <html>
 <head>
 	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery.timeago.js"></script>
 	<script type="text/javascript" src="js/underscore.js"></script>
 	<script type="text/javascript" src="js/backbone.js"></script>
 	<script type="text/javascript" src="js/handlebars.js"></script>
 	<script type="text/javascript" src="js/mustache.js"></script>
-	<script type="text/javascript" src="js/moment.js"></script>
 </head>
 
 <body>
     <script id="entryTemplate" type="text/x-handlebars-template">
-        <h2 class="entry-title">{{ title }}</h2>
-        <div class="entry-content">
-            {{ content }}
+        <h2 class="entry-title" id="entry-title-{{slug}}">{{{title}}}</h2>
+        <div class="entry-author" id="entry-author-{{slug}}">
+            Written by: {{creator.fullname}} ({{creator.username}})
+        </div>
+        <div class="entry-create-time">
+            Created {{created_timeago}}.
+        </div>
+        <div class="entry-content" id="entry-content-{{slug}}">
+            {{{content}}}
+        </div>
+        <div class="entry-taglist" id="entry-taglist-{{slug}}">
+            Tags:
+            {{#each tags}}
+            <span class="entry-tag">{{this}}</span>
+            {{/each}}
         </div>
     </script>
+
+    <header>
+        <p>This is some header text</p>
+    </header>
 
     <div id="entries">
     </div>
