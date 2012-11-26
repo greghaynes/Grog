@@ -9,11 +9,13 @@
 </head>
 
 <body>
+    <script id="entryAuthorTemplate" type="text/x-handlebars-template">
+        Written by: {{fullname}} ({{username}})
+    </script>
+
     <script id="entryTemplate" type="text/x-handlebars-template">
         <h2 class="entry-title" id="entry-title-{{slug}}">{{{title}}}</h2>
-        <div class="entry-author" id="entry-author-{{slug}}">
-            Written by: {{creator.fullname}} ({{creator.username}})
-        </div>
+        <div class="entry-author" id="entry-author-{{slug}}"></div>
         <div class="entry-create-time">
             Created {{created_timeago}}.
         </div>
@@ -23,8 +25,11 @@
         <div class="entry-taglist" id="entry-taglist-{{slug}}">
             Tags:
             {{#each tags}}
-            <span class="entry-tag">{{this}}</span>
+            <span class="entry-tag">{{this.name}}</span>
             {{/each}}
+        </div>
+        <div class="entry-comments">
+            Comments ({{comments.length}})
         </div>
     </script>
 
