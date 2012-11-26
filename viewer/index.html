@@ -6,30 +6,38 @@
 	<script type="text/javascript" src="js/backbone.js"></script>
 	<script type="text/javascript" src="js/handlebars.js"></script>
 	<script type="text/javascript" src="js/mustache.js"></script>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
 </head>
 
 <body>
     <script id="entryAuthorTemplate" type="text/x-handlebars-template">
-        Written by: {{fullname}} ({{username}})
+        Written by <span class="entry-author-fullname">{{fullname}}</span>
     </script>
 
     <script id="entryTemplate" type="text/x-handlebars-template">
         <h2 class="entry-title" id="entry-title-{{slug}}">{{{title}}}</h2>
-        <div class="entry-author" id="entry-author-{{slug}}"></div>
-        <div class="entry-create-time">
-            Created {{created_timeago}}.
+
+        <div class="entry-author-time">
+            <span class="entry-author" id="entry-author-{{slug}}"></span>
+            <span class="entry-create-time">{{created_timeago}}.</span>
         </div>
+
         <div class="entry-content" id="entry-content-{{slug}}">
             {{{content}}}
         </div>
-        <div class="entry-taglist" id="entry-taglist-{{slug}}">
-            Tags:
-            {{#each tags}}
-            <span class="entry-tag">{{this.name}}</span>
-            {{/each}}
-        </div>
-        <div class="entry-comments">
-            Comments ({{comments.length}})
+
+        <div class="entry-taglist-comments">
+            <span class="entry-comments">
+                {{comments.length}} Comments.
+            </span>
+            <span class="entry-taglist" id="entry-taglist-{{slug}}">
+                Tags:
+                {{#each tags}}
+                <span class="entry-tag">{{this.name}}</span>
+                {{/each}}
+            </span>
         </div>
     </script>
 
