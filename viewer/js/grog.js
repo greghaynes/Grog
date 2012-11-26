@@ -1,38 +1,5 @@
 (function ($) {
 
-// Stub content for testing
-var stub_tags = [
-    { slug: 'tag1', name: 'Tag 1' },
-    { slug: 'tag2', name: 'Tag 2' }
-];
-
-var stub_entries = [
-    {
-        id: 0,
-        slug: 'the_first_entry',
-        title: "The First Entry",
-        content: "This is the first entry, not a lot to <b>see</b> here.", 
-        tags: [stub_tags[0]],
-        creator: 'testuser',
-        created_on: "2008-07-17T09:24:17Z",
-        modified_on: "2008-07-17T09:24:17Z",
-    }, {
-        id: 1,
-        slug: 'second_entry',
-        title: "A Second Entry",
-        content: "This is the second entry. There is not a lot to <b>see</b> here.", 
-        tags: [stub_tags[0], stub_tags[1]],
-        creator: 'testuser',
-        comments: [
-            {
-                title: 'Comment one',
-                content: 'This it comment number one',
-                author: 'Some person'
-            },
-        ],
-    },
-];
-
 var Models = {
     Author: Backbone.Model.extend({
         urlRoot: '/users/',
@@ -81,9 +48,15 @@ var Collections = {
 
     Entries: Backbone.Collection.extend({
         model: Models.Entry,
+        start_offset: 0,
+        count: 10,
         comparator: function(entry) {
             return - new Date(entry.get('created_on')).valueOf();
-        }
+        },
+        url: function() {
+            var ret = '/entries/latest?offset=' + this.start_offset + '&amp;count=' + this.count + '&amp;';
+            return ret;
+        },
     }),
 };
 
@@ -123,7 +96,8 @@ var Views = {
     EntriesView: Backbone.View.extend({
         el: $("#entries"),
         initialize: function() {
-            this.collection = new Collections.Entries(stub_entries);
+            this.collection = new Collections.Entries();
+            this.collection.fetch();
             this.render();
         },
         render: function() {
