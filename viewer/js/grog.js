@@ -54,7 +54,8 @@ var Collections = {
             return - new Date(entry.get('created_on')).valueOf();
         },
         url: function() {
-            var ret = '/entries/latest?offset=' + this.start_offset + '&amp;count=' + this.count + '&amp;';
+            var ret = '/entries/latest'
+            //?offset=' + this.start_offset + '&amp;count=' + this.count + '&amp;';
             return ret;
         },
     }),
@@ -97,6 +98,8 @@ var Views = {
         el: $("#entries"),
         initialize: function() {
             this.collection = new Collections.Entries();
+            this.collection.on('add', this.render, this);
+            this.collection.on('reset', this.render, this);
             this.collection.fetch();
             this.render();
         },
@@ -111,7 +114,10 @@ var Views = {
                 model: entry,
             });
             this.$el.append(entryView.render().el);
-        }
+        },
+        onAdded: function(model, collection) {
+            console.log(entry, 'entry added');
+        },
     }),
 };
 
