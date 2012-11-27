@@ -17,6 +17,11 @@
     </script>
 
     <script id="entryCommentsTemplate" type="text/x-handlebars-template">
+        <ul>
+            {{#each comments}}
+            <li>{{this.title}}</li>
+            {{/each}}
+        </ul>
     </script>
 
     <script id="entryAuthorTemplate" type="text/x-handlebars-template">

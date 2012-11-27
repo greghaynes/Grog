@@ -1,19 +1,13 @@
 (function ($) {
 
 var Models = {
-    Author: Backbone.Model.extend({
-        urlRoot: '/users/',
+    User: Backbone.Model.extend({
+        urlRoot: '/api/users/',
         defaults: {
             fullname: 'John Doe',
-            username: 'someuser',
         },
-    }),
-
-    EntryTag: Backbone.Model.extend({
-        defaults: {
-            slug: 'invalid_slug',
-            name: 'Unknown Tag',
-            description: 'Not loaded',
+        browseurl: function() {
+            return '/users/' + this.id;
         }
     }),
 
@@ -22,7 +16,7 @@ var Models = {
             id: -1,
             title: 'Unknown comment',
             content: 'No content.',
-            author: 'Unknown author',
+            author: 'undefined_author',
         }
     }),
 
@@ -32,18 +26,21 @@ var Models = {
             slug: 'invalid_slug',
             title: 'No title',
             content: 'No content.',
-            tags: [],
             created_on: new Date().toISOString(),
             modified_on: new Date().toISOString(),
             creator: '',
-            comments: [],
+        },
+        initialize: function() {
+            this.comments = new Collections.EntryComments;
+            this.comments.url = '/api/entries/' + this.get('slug') + '/comments';
+            this.comments.fetch();
         }
     }),
 };
 
 var Collections = {
-    Authors: Backbone.Collection.extend({
-        model: Models.Author
+    EntryComments: Backbone.Collection.extend({
+        model: Models.Comment,
     }),
 
     Entries: Backbone.Collection.extend({
@@ -54,22 +51,37 @@ var Collections = {
             return - new Date(entry.get('created_on')).valueOf();
         },
         url: function() {
-            var ret = '/entries/latest'
+            return '/api/entries/latest';
             //?offset=' + this.start_offset + '&amp;count=' + this.count + '&amp;';
-            return ret;
         },
     }),
 };
 
 var Views = {
+    EntryCommentsView: Backbone.View.extend({
+        blurb_template: Handlebars.compile($("#entryCommentsBlurbTemplate").html()),
+        full_template: Handlebars.compile($("#entryCommentsTemplate").html()),
+        initialize: function() {
+            this.model.on("reset", this.render, this);
+        },
+        render: function() {
+            var ctxt = this.model.toJSON();
+            console.log(ctxt, "rendering comments");
+            this.$el.html(this.blurb_template({ comments: ctxt }));
+            return this;
+        }
+    }),
+
     EntryAuthorView: Backbone.View.extend({
         template: Handlebars.compile($("#entryAuthorTemplate").html()),
         initialize: function() {
             this.model.on('change', this.render, this);
         },
         render: function() {
-            console.log(this.model.toJSON(), 'rendering author');
-            this.$el.html(this.template(this.model.toJSON()));
+            var ctxt = this.model.toJSON();
+            ctxt['browseurl'] = this.model.browseurl();
+            console.log(ctxt, 'rendering author');
+            this.$el.html(this.template(ctxt));
             return this;
         }
     }),
@@ -78,19 +90,33 @@ var Views = {
         tagName: "article",
         className: "entry-container",
         template: Handlebars.compile($("#entryTemplate").html()),
+        initialize: function() {
+            this.model.on('reset', this.render, this);
+        },
         render: function() {
             var ctxt = this.model.toJSON();
             ctxt['created_timeago'] = $.timeago(ctxt['created_on']);
             console.log(ctxt, "Render entry");
             this.$el.html(this.template(ctxt));
             
-            var author = new Models.Author({id: ctxt['creator']});
-            author.fetch();
+            this.renderAuthor(ctxt['creator'], this.$("#entry-author-" + ctxt['slug']));
+            console.log(this.model.comments.toJSON(), 'entry comments');
+
+            var comments_view = new Views.EntryCommentsView({
+                el: this.$("#entry-comments-"+ctxt['slug']),
+                model: this.model.comments
+            });
+            comments_view.render();
+            return this;
+        },
+
+        renderAuthor: function(username, target_el) {
+            var author = new Models.User({id: username});
             var authorView = new Views.EntryAuthorView({
-                el: this.$('#entry-author-'+ctxt['slug']),
+                el: target_el,
                 model: author
             });
-            return this;
+            author.fetch();
         }
     }),
 
@@ -108,6 +134,7 @@ var Views = {
             _.each(this.collection.models, function(item) {
                 view_ctxt.renderEntry(item);
             }, this);
+            return this;
         },
         renderEntry: function(entry) {
             var entryView = new Views.EntryView({
