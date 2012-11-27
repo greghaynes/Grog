@@ -1,7 +1,16 @@
 body {
-    background: #BBB;
+    background: #DDD;
     font-family:'Open Sans', sans-serif;
     font-size: 90%;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h1 {
+    margin: 10px;;
 }
 
 h2 {

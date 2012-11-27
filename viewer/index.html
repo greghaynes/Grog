@@ -12,8 +12,15 @@
 </head>
 
 <body>
+    <script id="entryCommentsBlurbTemplate" type="text/x-handlebars-template">
+        {{comments.length}} Comments.
+    </script>
+
+    <script id="entryCommentsTemplate" type="text/x-handlebars-template">
+    </script>
+
     <script id="entryAuthorTemplate" type="text/x-handlebars-template">
-        Written by <span class="entry-author-fullname">{{fullname}}</span>
+        Written by <a href="{{browseurl}}"><span class="entry-author-fullname">{{fullname}}</span></a>
     </script>
 
     <script id="entryTemplate" type="text/x-handlebars-template">
@@ -29,20 +36,14 @@
         </div>
 
         <div class="entry-taglist-comments">
-            <span class="entry-comments">
-                {{comments.length}} Comments.
-            </span>
-            <span class="entry-taglist" id="entry-taglist-{{slug}}">
-                Tags:
-                {{#each tags}}
-                <span class="entry-tag">{{this.name}}</span>
-                {{/each}}
-            </span>
+            <div class="entry-comments" id="entry-comments-{{slug}}">
+            </div>
         </div>
     </script>
 
     <header>
-        <p>This is some header text</p>
+        <h1>This is some header text</h1>
+        <p>And some more</p>
     </header>
 
     <div id="entries">
