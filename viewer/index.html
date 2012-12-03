@@ -29,14 +29,14 @@
     </script>
 
     <script id="entryTemplate" type="text/x-handlebars-template">
-        <h2 class="entry-title" id="entry-title-{{slug}}">{{{title}}}</h2>
+        <h2 class="entry-title" id="entry-title-{{slug}}" {{#if editable}}contenteditable="true"{{/if}}>{{{title}}}</h2>
 
         <div class="entry-author-time">
             <span class="entry-author" id="entry-author-{{slug}}"></span>
             <span class="entry-create-time">{{created_timeago}}.</span>
         </div>
 
-        <div class="entry-content" id="entry-content-{{slug}}">
+        <div class="entry-content" id="entry-content-{{slug}}" {{#if editable}}contenteditable="true"{{/if}}>
             {{{content}}}
         </div>
 

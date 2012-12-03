@@ -96,6 +96,7 @@ var Views = {
         render: function() {
             var ctxt = this.model.toJSON();
             ctxt['created_timeago'] = $.timeago(ctxt['created_on']);
+            ctxt['editable'] = my_user.get('username') == this.model.get('creator');
             console.log(ctxt, "Render entry");
             this.$el.html(this.template(ctxt));
             
@@ -130,9 +131,8 @@ var Views = {
             this.render();
         },
         render: function() {
-            var view_ctxt = this;
             _.each(this.collection.models, function(item) {
-                view_ctxt.renderEntry(item);
+                this.renderEntry(item);
             }, this);
             return this;
         },
@@ -147,6 +147,9 @@ var Views = {
         },
     }),
 };
+
+var my_user = new Models.User({ id: 'me' });
+my_user.fetch();
 
 var entries_view = new Views.EntriesView();
 
