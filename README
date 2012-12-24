@@ -1,14 +1,34 @@
 Grog
----------------
+====
 A simple JSON blog backend
 
-Usage:
-	Edit grog/settings.py to your liking
 
-	python manage.py initdb
-	python manage.py runserver
+Usage
+-----
 
-Testing:
-	Edit tests/settings.py
-	python test.py
+Edit grog/settings.py to your liking
 
+python manage.py initdb
+python manage.py runserver
+
+
+Testing
+-------
+
+Edit tests/settings.py
+python test.py
+
+
+API
+---
+All uris are under servername/api.
+
+Users:
+    User objects contain the following information:
+        {
+            username: unique username for user
+            privilege: One of 'ADMINISTRATOR', 'EDITOR', 'USER', 'GUEST'
+            created_on: ISO 8601 date string
+            display_name: Name for consumption by other humans
+        }
+    /users/me - Currently logged in user

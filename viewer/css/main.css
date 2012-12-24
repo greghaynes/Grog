@@ -1,12 +1,18 @@
 body {
-    background: #DDD;
-    font-family:'Open Sans', sans-serif;
+    background: #EEE;
+    font-family: sans-serif;
     font-size: 90%;
+    margin: 0;
 }
 
 header {
     text-align: center;
     margin-bottom: 40px;
+}
+
+#headerTopBar {
+    text-align: left;
+    padding: 10px;
 }
 
 h1 {
@@ -17,6 +23,16 @@ h2 {
     margin: 5px;
     margin-left: 0;
     margin-top: 0;
+}
+
+#admintools_content {
+    background: #444;
+    color: #FFF;
+    padding: 20px;
+}
+
+#admintools_link {
+    padding: 10px;
 }
 
 article.entry-container {

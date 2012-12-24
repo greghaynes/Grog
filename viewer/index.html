@@ -7,11 +7,34 @@
 	<script type="text/javascript" src="js/handlebars.js"></script>
 	<script type="text/javascript" src="js/mustache.js"></script>
 
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/css/main.css"/>
 </head>
 
 <body>
+    <script id="insufficientPermissionsTemplate" type="text/x-handlebars-template">
+        <p>Insufficient Persmissions. Return to the <a href="#">blog</a>.</p>
+    </script>
+
+    <script id="headerTemplate" type="text/x-handlebars-template">
+        <div id="headerTopBar">
+            Welcome, {{username}}.
+            {{#if logged_in}}
+            <a href="/#logout">Logout</a>
+            {{else}}
+            <a style="cursor:hand;" id="loginLink">Login</a>
+            {{/if}}
+            {{# if admin }}
+            <a href="/#admin">Admin</a>
+            {{/if}}
+        </div>
+        <h1>This is some header text</h1>
+        <p>And this is some header sub text</p>
+    </script>
+
+    <script id="adminPanelTemplate" type="text/x-handlebars-template">
+        <p>This is the admin panel. Back to the <a href="#">blog</a>.</p>
+    </script>
+
     <script id="entryCommentsBlurbTemplate" type="text/x-handlebars-template">
         {{comments.length}} Comments.
     </script>
@@ -46,12 +69,10 @@
         </div>
     </script>
 
-    <header>
-        <h1>This is some header text</h1>
-        <p>And some more</p>
+    <header id="mainheader">
     </header>
 
-    <div id="entries">
+    <div id="maincontent">
     </div>
 
 	<script type="text/javascript" src="js/grog.js"></script>
