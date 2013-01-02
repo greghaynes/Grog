@@ -18,17 +18,83 @@ Testing
 Edit tests/settings.py
 python test.py
 
+Read API
+--------
+All uris are under /api.
 
-API
----
-All uris are under servername/api.
+Entries:
+    Entry objects contain the following information:
+    {
+        slug: unique slug for entry
+        title: The entry title
+        created_on: ISO 8601 date string
+        last_edited_on: ISO 8601 date string
+        creator: username of creator
+        content: entry content
+    }
+    /entries/latest - List of most recent entries
+    /entries/by_slug/<slug> - Lookup entry by slug
+
+Comments:
+    Comments contain the following information:
+    {
+        title: title for the comment
+        creator: username of creator
+        created_on: ISO 8601 date string
+        content: comment content
+    }
+    /entries/comments/by_slug/<slug> - List of comments for entry
 
 Users:
     User objects contain the following information:
-        {
-            username: unique username for user
-            privilege: One of 'ADMINISTRATOR', 'EDITOR', 'USER', 'GUEST'
-            created_on: ISO 8601 date string
-            display_name: Name for consumption by other humans
-        }
+    {
+        username: unique username for user
+        privilege: One of 'ADMINISTRATOR', 'EDITOR', 'USER', 'GUEST'
+        created_on: ISO 8601 date string
+        display_name: Name for consumption by other humans
+    }
     /users/me - Currently logged in user
+    /users/by_username/<username> - Lookup by username
+
+Admin:
+    /admin/users/list - List of all users
+
+    /admin/settings - Settings object
+    Settings object:
+    {
+        header: String for primary header
+        sub_header: String for sub header
+    }
+
+Write API
+---------
+All writes return a response object containng the following data
+{
+    success: True or False
+    data: If success == True then response data object, otherwise error object
+}
+
+Users:
+    POST to /login:
+        Request body contains:
+        {
+            username: <username>
+            password: <password>
+        }
+    POST to /logout
+
+Editing:
+    PUT to /edit/entry/by_slug/<entry_slug>:
+        This will either create or update and existing entry
+        Request body contains an entry object
+        Response data contains new entry object
+
+Admin:
+    PUT to /admin/settings:
+        Request body contains settings object which overrides current settings
+        Response data is new settings object
+
+    PUT to /admin/users/by_username/<user>:
+        Sets user properties to properties in body, cannot change username.
+        Response data is new user object
+
